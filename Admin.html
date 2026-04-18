@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Tendencia Perfumes</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --noir: #0a0a0a;
+  --noir2: #111111;
+  --noir3: #1a1a1a;
+  --or: #c9a96e;
+  --or2: #e8cc99;
+  --creme: #f5f0e8;
+  --gris: #888888;
+  --gris2: #555555;
+  --border: rgba(201,169,110,0.2);
+  --border2: rgba(201,169,110,0.08);
+  --danger: #ef4444;
+  --danger-soft: rgba(239,68,68,0.1);
+  --success: #4ade80;
+  --success-soft: rgba(74,222,128,0.1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Jost', sans-serif;
+  background: var(--noir);
+  color: var(--creme);
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 240px;
+  background: var(--noir2);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 0; top: 0; bottom: 0;
+  z-index: 20;
+  transition: transform 0.3s ease;
+}
+
+.sidebar-logo {
+  padding: 36px 28px 28px;
+  border-bottom: 1px solid var(--border2);
+}
+
+.sidebar-logo h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  color: var(--or2);
+  text-transform: uppercase;
+}
+
+.sidebar-logo p {
+  font-size: 10px;
+  color: var(--gris2);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: transparent;
+  border: none;
+  color: var(--gris);
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-align: left;
+  width: 100%;
+  border-radius: 2px;
+  transition: all 0.25s;
+  position: relative;
+}
+
+.nav-item:hover {
+  color: var(--creme);
+  background: var(--border2);
+}
+
+.nav-item.active {
+  color: var(--or);
+  background: rgba(201,169,110,0.07);
+}
+
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 20%; bottom: 20%;
+  width: 2px;
+  background: var(--or);
+  border-radius: 0 2px 2px 0;
+}
+
+.nav-icon { font-size: 16px; width: 20px; text-align: center; }
+
+.sidebar-footer {
+  padding: 16px;
+  border-top: 1px solid var(--border2);
+}
+
+.logout-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: none;
+  border: 1px solid transparent;
+  color: var(--gris2);
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transition: all 0.3s;
+}
+
+.logout-btn:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+/* ── MAIN ── */
+.main {
+  margin-left: 240px;
+  flex: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── TOP BAR ── */
+.topbar {
+  padding: 24px 40px;
+  border-bottom: 1px solid var(--border2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(10,10,10,0.9);
+  backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.page-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 300;
+  color: var(--creme);
+}
+
+.page-title span {
+  font-style: italic;
+  color: var(--or2);
+}
+
+.topbar-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* ── CONTENT ── */
+.content { padding: 40px; flex: 1; }
+
+/* ── FORM CARD ── */
+.form-card {
+  background: var(--noir2);
+  border: 1px solid var(--border2);
+  padding: 36px;
+  margin-bottom: 32px;
+}
+
+.form-card-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 300;
+  color: var(--creme);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.form-card-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border2);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-group { margin-bottom: 16px; }
+
+.form-label {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gris);
+  margin-bottom: 8px;
+}
+
+.form-input, .form-select {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--noir3);
+  border: 1px solid var(--border2);
+  color: var(--creme);
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+  font-weight: 300;
+  outline: none;
+  transition: border-color 0.3s;
+  border-radius: 0;
+}
+
+.form-input:focus, .form-select:focus { border-color: var(--or); }
+.form-input::placeholder { color: var(--gris2); }
+
+.form-select option {
+  background: var(--noir3);
+  color: var(--creme);
+}
+
+/* Toolbar editor */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 12px;
+  background: var(--noir3);
+  border: 1px solid var(--border2);
+  border-bottom: none;
+  margin-top: 16px;
+}
+
+.toolbar-btn, .toolbar-select {
+  background: var(--noir2);
+  border: 1px solid var(--border2);
+  color: var(--creme);
+  padding: 6px 12px;
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.25s;
+  outline: none;
+  border-radius: 0;
+}
+
+.toolbar-btn:hover { border-color: var(--or); color: var(--or); }
+.toolbar-color { padding: 4px; width: 36px; height: 32px; cursor: pointer; border-radius: 0; }
+
+.editor-area {
+  background: #fafaf8;
+  color: #1a1a1a;
+  padding: 24px;
+  min-height: 200px;
+  border: 1px solid var(--border2);
+  outline: none;
+  font-family: 'Jost', sans-serif;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+/* ── BUTTONS ── */
+.btn {
+  padding: 12px 28px;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  border: none;
+  transition: all 0.3s;
+}
+
+.btn-primary {
+  background: var(--or);
+  color: var(--noir);
+}
+
+.btn-primary:hover {
+  background: var(--or2);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(201,169,110,0.2);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--gris);
+}
+
+.btn-outline:hover { border-color: var(--or); color: var(--or); }
+
+.btn-danger {
+  background: var(--danger-soft);
+  border: 1px solid transparent;
+  color: var(--danger);
+  padding: 8px 16px;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+}
+
+.btn-danger:hover { border-color: var(--danger); }
+
+.btn-edit {
+  background: rgba(201,169,110,0.08);
+  border: 1px solid transparent;
+  color: var(--or);
+  padding: 8px 16px;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+}
+
+.btn-edit:hover { border-color: var(--or); }
+
+/* ── ITEMS LIST ── */
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.item-card {
+  background: var(--noir2);
+  border: 1px solid var(--border2);
+  overflow: hidden;
+  transition: all 0.3s;
+  animation: cardIn 0.3s ease;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.item-card:hover {
+  border-color: var(--border);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+
+.item-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  filter: brightness(0.85);
+  transition: filter 0.3s;
+}
+
+.item-card:hover img { filter: brightness(0.95); }
+
+.item-body {
+  padding: 16px 20px;
+}
+
+.item-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  color: var(--creme);
+  margin-bottom: 4px;
+}
+
+.item-meta {
+  font-size: 11px;
+  color: var(--gris);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.item-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* ── POLITICAS ── */
+.politica-card {
+  background: var(--noir2);
+  border: 1px solid var(--border2);
+  padding: 24px;
+  margin-bottom: 12px;
+  transition: border-color 0.3s;
+  animation: cardIn 0.3s ease;
+}
+
+.politica-card:hover { border-color: var(--border); }
+
+.politica-titulo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--creme);
+  margin-bottom: 10px;
+}
+
+.politica-preview {
+  font-size: 13px;
+  color: var(--gris);
+  line-height: 1.7;
+  margin-bottom: 16px;
+  max-height: 80px;
+  overflow: hidden;
+  position: relative;
+}
+
+.politica-preview::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 30px;
+  background: linear-gradient(transparent, var(--noir2));
+}
+
+.politica-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* ── STATS ── */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background: var(--noir2);
+  border: 1px solid var(--border2);
+  padding: 24px 28px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.stat-icon {
+  font-size: 28px;
+  opacity: 0.7;
+}
+
+.stat-label {
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gris);
+  margin-bottom: 4px;
+}
+
+.stat-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 300;
+  color: var(--or);
+  line-height: 1;
+}
+
+/* ── TOAST ── */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--noir3);
+  border: 1px solid var(--border);
+  color: var(--creme);
+  padding: 14px 24px;
+  font-size: 13px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s;
+  z-index: 999;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+
+/* ── MOBILE ── */
+.menu-toggle {
+  display: none;
+  position: fixed;
+  top: 16px; left: 16px;
+  z-index: 30;
+  background: var(--noir2);
+  border: 1px solid var(--border);
+  color: var(--or);
+  width: 40px; height: 40px;
+  font-size: 18px;
+  align-items: center;
+  justify-content: center;
+}
+
+@media(max-width:900px){
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  .sidebar.open { transform: translateX(0); }
+  .main { margin-left: 0; }
+  .menu-toggle { display: flex; }
+  .topbar { padding: 16px 20px 16px 64px; }
+  .content { padding: 20px; }
+  .form-row { grid-template-columns: 1fr; }
+  .stats-row { grid-template-columns: 1fr; }
+  .items-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media(max-width:480px){
+  .items-grid { grid-template-columns: 1fr; }
+}
+
+/* ── OVERLAY ── */
+.sidebar-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 15;
+}
+.sidebar-overlay.active { display: block; }
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+<div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<button class="menu-toggle" id="menuToggle" onclick="toggleSidebar()">☰</button>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <h1>Tendencia</h1>
+    <p>Panel Admin</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <button class="nav-item active" id="nav-esencias" onclick="showSection('esencias')">
+      <span class="nav-icon">✦</span> Esencias
+    </button>
+    <button class="nav-item" id="nav-envases" onclick="showSection('envases')">
+      <span class="nav-icon">◈</span> Envases
+    </button>
+    <button class="nav-item" id="nav-politicas" onclick="showSection('politicas')">
+      <span class="nav-icon">◇</span> Políticas
+    </button>
+  </nav>
+
+  <div class="sidebar-footer">
+    <button class="logout-btn" onclick="logout()">
+      <span class="nav-icon">⇠</span> Cerrar sesión
+    </button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <h2 class="page-title" id="pageTitle">Gestión de <span>Esencias</span></h2>
+    <div class="topbar-actions" id="topbarActions"></div>
+  </div>
+
+  <div class="content" id="content"></div>
+</main>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyClkqdEQiTeSdQqjdqbQ4nxTrXbuf9_h-0",
+  authDomain: "perfumeria-app.firebaseapp.com",
+  projectId: "perfumeria-app"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+let currentSection = 'esencias';
+let editingId = null;
+
+/* ── TOAST ── */
+function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2800); }
+
+/* ── SIDEBAR MOBILE ── */
+function toggleSidebar(){ document.getElementById('sidebar').classList.toggle('open'); document.getElementById('overlay').classList.toggle('active'); }
+function closeSidebar(){ document.getElementById('sidebar').classList.remove('open'); document.getElementById('overlay').classList.remove('active'); }
+
+/* ── NAVIGATION ── */
+function showSection(section){
+  currentSection = section;
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('nav-'+section).classList.add('active');
+  closeSidebar();
+
+  const titles = { esencias:'Gestión de <span>Esencias</span>', envases:'Gestión de <span>Envases</span>', politicas:'Gestión de <span>Políticas</span>' };
+  document.getElementById('pageTitle').innerHTML = titles[section];
+
+  if(section==='esencias') renderEsencias();
+  if(section==='envases') renderEnvases();
+  if(section==='politicas') renderPoliticas();
+}
+
+/* ══════════════════════════════
+   ESENCIAS
+══════════════════════════════ */
+function renderEsencias(){
+  document.getElementById('content').innerHTML = `
+    <div class="form-card">
+      <div class="form-card-title">Nueva esencia</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Nombre</label>
+          <input class="form-input" id="esNombre" placeholder="Ej. Oud Oscuro">
+        </div>
+        <div class="form-group">
+          <label class="form-label">URL de imagen</label>
+          <input class="form-input" id="esImg" placeholder="https://...">
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="crearEsencia()">Guardar esencia</button>
+    </div>
+    <div class="stats-row" id="esStats"></div>
+    <div class="items-grid" id="esLista"></div>`;
+  cargarEsencias();
+}
+
+async function crearEsencia(){
+  const nombre = document.getElementById('esNombre').value.trim();
+  const imagen = document.getElementById('esImg').value.trim();
+  if(!nombre){ toast('Ingresa un nombre'); return; }
+  await db.collection("esencias").add({nombre, imagen});
+  document.getElementById('esNombre').value='';
+  document.getElementById('esImg').value='';
+  toast('✓ Esencia guardada');
+  cargarEsencias();
+}
+
+async function cargarEsencias(){
+  const snap = await db.collection("esencias").get();
+  const lista = document.getElementById("esLista");
+  const stats = document.getElementById("esStats");
+
+  stats.innerHTML = `
+    <div class="stat-card"><span class="stat-icon">✦</span><div><div class="stat-label">Total esencias</div><div class="stat-value">${snap.size}</div></div></div>
+  `;
+
+  lista.innerHTML = '';
+  snap.forEach(doc=>{
+    const d = doc.data();
+    lista.innerHTML += `
+      <div class="item-card">
+        <img src="${d.imagen || 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400&q=70'}" alt="${d.nombre}" onerror="this.src='https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400&q=70'">
+        <div class="item-body">
+          <div class="item-name">${d.nombre}</div>
+          <div class="item-actions">
+            <button class="btn btn-edit" onclick="editarEsencia('${doc.id}','${d.nombre.replace(/'/g,"\\'")}','${d.imagen}')">Editar</button>
+            <button class="btn btn-danger" onclick="eliminarEsencia('${doc.id}')">Eliminar</button>
+          </div>
+        </div>
+      </div>`;
+  });
+}
+
+async function editarEsencia(id, nombre, imagen){
+  const n = prompt("Nombre:", nombre);
+  if(n===null) return;
+  const i = prompt("URL imagen:", imagen);
+  if(i===null) return;
+  await db.collection("esencias").doc(id).update({nombre:n, imagen:i});
+  toast('✓ Esencia actualizada');
+  cargarEsencias();
+}
+
+async function eliminarEsencia(id){
+  if(!confirm("¿Eliminar esta esencia?")) return;
+  await db.collection("esencias").doc(id).delete();
+  toast('Esencia eliminada');
+  cargarEsencias();
+}
+
+/* ══════════════════════════════
+   ENVASES
+══════════════════════════════ */
+function renderEnvases(){
+  document.getElementById('content').innerHTML = `
+    <div class="form-card">
+      <div class="form-card-title">Nuevo envase</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Nombre</label>
+          <input class="form-input" id="envNombre" placeholder="Ej. Botella Noir">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Categoría</label>
+          <select class="form-select" id="envCat">
+            <option>30ml</option>
+            <option>50ml</option>
+            <option>100ml</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Precio base ($)</label>
+          <input class="form-input" id="envPrecio" placeholder="0.00" type="number" min="0" step="0.01">
+        </div>
+        <div class="form-group">
+          <label class="form-label">URL de imagen</label>
+          <input class="form-input" id="envImg" placeholder="https://...">
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="crearEnvase()">Guardar envase</button>
+    </div>
+    <div class="stats-row" id="envStats"></div>
+    <div class="items-grid" id="envLista"></div>`;
+  cargarEnvases();
+}
+
+async function crearEnvase(){
+  const nombre = document.getElementById('envNombre').value.trim();
+  const categoria = document.getElementById('envCat').value;
+  const precio = document.getElementById('envPrecio').value;
+  const imagen = document.getElementById('envImg').value.trim();
+  if(!nombre){ toast('Ingresa un nombre'); return; }
+  await db.collection("envases").add({nombre, categoria, precio: Number(precio)||0, imagen});
+  document.getElementById('envNombre').value='';
+  document.getElementById('envImg').value='';
+  document.getElementById('envPrecio').value='';
+  toast('✓ Envase guardado');
+  cargarEnvases();
+}
+
+async function cargarEnvases(){
+  const snap = await db.collection("envases").get();
+  const lista = document.getElementById("envLista");
+  const stats = document.getElementById("envStats");
+
+  stats.innerHTML = `
+    <div class="stat-card"><span class="stat-icon">◈</span><div><div class="stat-label">Total envases</div><div class="stat-value">${snap.size}</div></div></div>
+  `;
+
+  lista.innerHTML = '';
+  snap.forEach(doc=>{
+    const d = doc.data();
+    lista.innerHTML += `
+      <div class="item-card">
+        <img src="${d.imagen || 'https://images.unsplash.com/photo-1541643600914-78b084683702?w=400&q=70'}" alt="${d.nombre}" onerror="this.src='https://images.unsplash.com/photo-1541643600914-78b084683702?w=400&q=70'">
+        <div class="item-body">
+          <div class="item-name">${d.nombre}</div>
+          <div class="item-meta">${d.categoria} · $${d.precio||0}</div>
+          <div class="item-actions">
+            <button class="btn btn-edit" onclick="editarEnvase('${doc.id}','${d.nombre.replace(/'/g,"\\'")}','${d.categoria}','${d.imagen}','${d.precio||0}')">Editar</button>
+            <button class="btn btn-danger" onclick="eliminarEnvase('${doc.id}')">Eliminar</button>
+          </div>
+        </div>
+      </div>`;
+  });
+}
+
+async function editarEnvase(id,n,c,i,p){
+  const nn = prompt("Nombre:", n); if(nn===null) return;
+  const cc = prompt("Categoría (30ml/50ml/100ml):", c); if(cc===null) return;
+  const pp = prompt("Precio:", p); if(pp===null) return;
+  const ii = prompt("URL imagen:", i); if(ii===null) return;
+  await db.collection("envases").doc(id).update({nombre:nn, categoria:cc, precio:Number(pp)||0, imagen:ii});
+  toast('✓ Envase actualizado');
+  cargarEnvases();
+}
+
+async function eliminarEnvase(id){
+  if(!confirm("¿Eliminar este envase?")) return;
+  await db.collection("envases").doc(id).delete();
+  toast('Envase eliminado');
+  cargarEnvases();
+}
+
+/* ══════════════════════════════
+   POLÍTICAS
+══════════════════════════════ */
+function renderPoliticas(){
+  editingId = null;
+  document.getElementById('content').innerHTML = `
+    <div class="form-card">
+      <div class="form-card-title" id="polFormTitle">Nueva política</div>
+
+      <div class="form-group">
+        <label class="form-label">Título</label>
+        <input class="form-input" id="polTitulo" placeholder="Ej. Política de Privacidad" style="font-size:16px;">
+      </div>
+
+      <div class="toolbar">
+        <select class="toolbar-select" onchange="fmt('fontName',this.value)">
+          <option value="Jost">Jost</option>
+          <option value="Georgia">Georgia</option>
+          <option value="Arial">Arial</option>
+        </select>
+        <select class="toolbar-select" onchange="fmt('fontSize',this.value)">
+          <option value="3">Normal</option>
+          <option value="4">Medio</option>
+          <option value="5">Grande</option>
+          <option value="6">Título</option>
+        </select>
+        <input type="color" class="toolbar-color" onchange="fmt('foreColor',this.value)" title="Color">
+        <button class="toolbar-btn" onclick="fmt('bold')" title="Negrita"><b>B</b></button>
+        <button class="toolbar-btn" onclick="fmt('italic')" title="Cursiva"><i>I</i></button>
+        <button class="toolbar-btn" onclick="fmt('underline')" title="Subrayado"><u>U</u></button>
+        <button class="toolbar-btn" onclick="fmt('justifyLeft')" title="Izq">⬅</button>
+        <button class="toolbar-btn" onclick="fmt('justifyCenter')" title="Centro">⬌</button>
+        <button class="toolbar-btn" onclick="fmt('justifyRight')" title="Der">➡</button>
+        <button class="toolbar-btn" onclick="fmt('insertUnorderedList')" title="Lista">• Lista</button>
+      </div>
+
+      <div class="editor-area" id="polEditor" contenteditable="true" placeholder="Escribe el contenido de la política..."></div>
+
+      <div style="display:flex;gap:12px;margin-top:20px;">
+        <button class="btn btn-primary" onclick="guardarPolitica()">Guardar política</button>
+        <button class="btn btn-outline" id="cancelEditBtn" onclick="cancelarEdicion()" style="display:none">Cancelar</button>
+      </div>
+    </div>
+    <div id="polLista"></div>`;
+
+  cargarPoliticas();
+}
+
+function fmt(cmd, val=null){ document.execCommand(cmd,false,val); }
+
+function cancelarEdicion(){
+  editingId=null;
+  document.getElementById('polTitulo').value='';
+  document.getElementById('polEditor').innerHTML='';
+  document.getElementById('polFormTitle').textContent='Nueva política';
+  document.getElementById('cancelEditBtn').style.display='none';
+  toast('Edición cancelada');
+}
+
+async function guardarPolitica(){
+  const titulo = document.getElementById('polTitulo').value.trim();
+  const contenido = document.getElementById('polEditor').innerHTML.trim();
+  if(!titulo){ toast('Ingresa un título'); return; }
+  if(!contenido || contenido==='<br>'){ toast('Ingresa contenido'); return; }
+
+  if(editingId){
+    await db.collection("politicas").doc(editingId).update({titulo, contenido});
+    editingId = null;
+    document.getElementById('cancelEditBtn').style.display='none';
+    document.getElementById('polFormTitle').textContent='Nueva política';
+    toast('✓ Política actualizada');
+  } else {
+    await db.collection("politicas").add({titulo, contenido});
+    toast('✓ Política guardada');
+  }
+
+  document.getElementById('polTitulo').value='';
+  document.getElementById('polEditor').innerHTML='';
+  cargarPoliticas();
+}
+
+async function cargarPoliticas(){
+  const snap = await db.collection("politicas").get();
+  const lista = document.getElementById("polLista");
+  lista.innerHTML='';
+
+  snap.forEach(doc=>{
+    const d = doc.data();
+    lista.innerHTML += `
+      <div class="politica-card">
+        <div class="politica-titulo">${d.titulo}</div>
+        <div class="politica-preview">${d.contenido}</div>
+        <div class="politica-actions">
+          <button class="btn btn-edit" onclick="editarPolitica('${doc.id}')">Editar</button>
+          <button class="btn btn-danger" onclick="eliminarPolitica('${doc.id}')">Eliminar</button>
+        </div>
+      </div>`;
+  });
+
+  if(snap.empty){ lista.innerHTML='<p style="color:var(--gris2);font-size:13px;padding:8px 0;">No hay políticas creadas aún.</p>'; }
+}
+
+async function editarPolitica(id){
+  const doc = await db.collection("politicas").doc(id).get();
+  const d = doc.data();
+  editingId = id;
+  document.getElementById('polTitulo').value = d.titulo;
+  document.getElementById('polEditor').innerHTML = d.contenido;
+  document.getElementById('polFormTitle').textContent='Editando política';
+  document.getElementById('cancelEditBtn').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+  toast('Editando: ' + d.titulo);
+}
+
+async function eliminarPolitica(id){
+  if(!confirm("¿Eliminar esta política?")) return;
+  await db.collection("politicas").doc(id).delete();
+  toast('Política eliminada');
+  cargarPoliticas();
+}
+
+/* ── LOGOUT ── */
+function logout(){
+  if(!confirm("¿Cerrar sesión?")) return;
+  firebase.auth().signOut().then(()=>{
+    localStorage.clear();
+    window.location.href="login.html";
+  });
+}
+
+/* ── INIT ── */
+showSection('esencias');
+</script>
+
+</body>
+</html>

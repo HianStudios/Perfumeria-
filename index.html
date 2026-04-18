@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tendencia Perfumes — Fragancias Únicas</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%230a0a0a' stroke='%23c9a96e' stroke-width='2.5'/%3E%3Ctext x='50' y='68' font-family='Georgia%2Cserif' font-size='60' font-weight='bold' fill='%23c9a96e' text-anchor='middle'%3ET%3C/text%3E%3C/svg%3E">
 
 <style>
 :root {
@@ -255,37 +256,133 @@ nav {
 
 .btn-ghost:hover::after { transform: translateX(4px); }
 
-.hero-img-wrap {
+/* ── HERO 3D CANVAS ── */
+.hero-3d {
   position: absolute;
   right: 0; top: 0; bottom: 0;
-  width: 48%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-.hero-img-wrap::before {
-  content: '';
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 40%;
-  background: linear-gradient(to right, var(--noir), transparent);
+  width: 52%;
   z-index: 1;
 }
 
-.hero-img-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.55;
-  filter: sepia(20%) brightness(0.85);
-  animation: slowZoom 12s ease infinite alternate;
+.hero-3d::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 45%;
+  background: linear-gradient(to right, var(--noir), transparent);
+  z-index: 2;
+  pointer-events: none;
 }
 
-@keyframes slowZoom {
-  from { transform: scale(1); }
-  to   { transform: scale(1.06); }
+#bottleCanvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+/* ── ETIQUETAS FLOTANTES ── */
+.bottle-label {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  z-index: 5;
+  pointer-events: none;
+  animation: labelFadeIn 1s ease forwards;
+  opacity: 0;
+}
+
+@keyframes labelFadeIn {
+  from { opacity: 0; transform: translateX(8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* AZUL → envase: parte media-superior del frasco, desde la izquierda */
+.label-envase {
+  left: 12%;
+  top: 48%;
+  flex-direction: row;
+  animation-delay: 1.2s;
+}
+
+/* ROJO → intensidad: parte media-alta derecha (tapa/collar) */
+.label-intensidad {
+  right: 2%;
+  top: 38%;
+  flex-direction: row;
+  animation-delay: 1.5s;
+}
+
+/* VERDE → esencia: parte media-baja del cuerpo, derecha */
+.label-esencia {
+  right: 2%;
+  top: 65%;
+  flex-direction: row;
+  animation-delay: 1.8s;
+}
+
+.label-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--or);
+  box-shadow: 0 0 8px rgba(201,169,110,0.8), 0 0 16px rgba(201,169,110,0.3);
+  flex-shrink: 0;
+  animation: dotPulse 2s ease infinite;
+}
+
+@keyframes dotPulse {
+  0%,100% { box-shadow: 0 0 6px rgba(201,169,110,0.8); }
+  50%      { box-shadow: 0 0 14px rgba(201,169,110,1), 0 0 28px rgba(201,169,110,0.4); }
+}
+
+.label-line {
+  width: 80px;
+  height: 30px;
+  flex-shrink: 0;
+}
+
+.label-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.label-text.text-right {
+  text-align: right;
+}
+
+.label-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--or2);
+  letter-spacing: 0.1em;
+  line-height: 1;
+}
+
+.label-sub {
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  font-weight: 300;
+  color: var(--gris);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+@media(max-width:768px){
+  .bottle-label { display: none; }
+  .hero-3d {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0.35;
+    top: 0;
+  }
+  .hero-3d::before {
+    width: 100%;
+    background: linear-gradient(to top, var(--noir) 35%, transparent);
+  }
 }
 
 /* ── MARQUEE ── */
@@ -553,8 +650,7 @@ footer {
 
   .hero { min-height: 100svh; align-items: flex-end; padding-bottom: 60px; }
   .hero-content { padding: 0 24px; }
-  .hero-img-wrap { width: 100%; opacity: 0.3; }
-  .hero-img-wrap::before { width: 100%; background: linear-gradient(to top, var(--noir) 30%, transparent); }
+  .hero-3d { width: 100%; opacity: 0.35; }
 
   .features { padding: 80px 24px; }
   .features-grid { grid-template-columns: 1fr; }
@@ -626,7 +722,7 @@ footer {
 
   <div class="hero-content">
     <div class="hero-eyebrow">
-      <span>Perfumería-A tu Medida</span>
+      <span>Perfumería Artesanal</span>
     </div>
     <h1>Tu fragancia,<br><em>tu identidad</em></h1>
     <p class="hero-sub">Diseña una fragancia exclusiva hecha a tu medida. Elige el envase, la esencia y la intensidad. Una obra personal, única e irrepetible.</p>
@@ -636,8 +732,42 @@ footer {
     </div>
   </div>
 
-  <div class="hero-img-wrap">
-    <img src="https://images.unsplash.com/photo-1541643600914-78b084683702?w=900&q=80" alt="Perfumes">
+  <div class="hero-3d" id="hero3d">
+    <canvas id="bottleCanvas"></canvas>
+
+    <!-- ETIQUETAS FLOTANTES -->
+    <div class="bottle-label label-envase">
+      <div class="label-dot"></div>
+      <svg class="label-line" viewBox="0 0 80 30" preserveAspectRatio="none">
+        <path d="M 70 15 Q 40 15 10 15" stroke="#c9a96e" stroke-width="1" fill="none" opacity="0.6"/>
+      </svg>
+      <div class="label-text">
+        <span class="label-title">Envase</span>
+        <span class="label-sub">Elige tu frasco</span>
+      </div>
+    </div>
+
+    <div class="bottle-label label-intensidad">
+      <div class="label-text text-right">
+        <span class="label-title">Intensidad</span>
+        <span class="label-sub">Alta o moderada</span>
+      </div>
+      <svg class="label-line" viewBox="0 0 80 30" preserveAspectRatio="none">
+        <path d="M 10 15 Q 40 15 70 15" stroke="#c9a96e" stroke-width="1" fill="none" opacity="0.6"/>
+      </svg>
+      <div class="label-dot"></div>
+    </div>
+
+    <div class="bottle-label label-esencia">
+      <div class="label-text text-right">
+        <span class="label-title">Esencia</span>
+        <span class="label-sub">Tu fragancia única</span>
+      </div>
+      <svg class="label-line" viewBox="0 0 80 30" preserveAspectRatio="none">
+        <path d="M 10 15 Q 40 15 70 15" stroke="#c9a96e" stroke-width="1" fill="none" opacity="0.6"/>
+      </svg>
+      <div class="label-dot"></div>
+    </div>
   </div>
 </section>
 
@@ -733,6 +863,9 @@ footer {
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
+<!-- Three.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
 <script>
 /* ── CURSOR ── */
 const cursor = document.getElementById('cursor');
@@ -747,7 +880,7 @@ document.querySelectorAll('button,a,.feature-card,.step').forEach(el=>{
 });
 
 /* ── MARQUEE ── */
-const items = ['Aromas Únicos','Envases Premium','Esencias Seleccionadas','Hecho Para Ti','Entrega Express','Calidad'];
+const items = ['Aromas Únicos','Envases Premium','Esencias Seleccionadas','Hecho Para Ti','Entrega Express','Calidad Artesanal'];
 const track = document.getElementById('marqueeTrack');
 let marqueeHTML = '';
 for(let i=0;i<4;i++){
@@ -789,6 +922,249 @@ async function cargarPoliticas(){
 cargarPoliticas();
 
 function irCliente(){ window.location.href = "Cliente.html"; }
+
+/* ══════════════════════════════════════
+   THREE.JS — FRASCO DE PERFUME 3D
+══════════════════════════════════════ */
+(function(){
+  const container = document.getElementById('hero3d');
+  const canvas    = document.getElementById('bottleCanvas');
+
+  // Scene
+  const scene    = new THREE.Scene();
+  const W = container.clientWidth;
+  const H = container.clientHeight;
+  const camera   = new THREE.PerspectiveCamera(45, W/H, 0.1, 100);
+  camera.position.set(0, -1.8, 4.4);
+
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true });
+  renderer.setSize(W, H);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type    = THREE.PCFSoftShadowMap;
+  renderer.toneMapping       = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.4;
+
+  // ── MATERIALS ──
+  const glassMat = new THREE.MeshPhysicalMaterial({
+    color: 0xffffff,
+    metalness: 0.0,
+    roughness: 0.0,
+    transmission: 0.95,
+    thickness: 0.5,
+    ior: 1.5,
+    transparent: true,
+    opacity: 0.82,
+    side: THREE.DoubleSide,
+    envMapIntensity: 1.2,
+  });
+
+  const goldMat = new THREE.MeshStandardMaterial({
+    color: 0xc9a96e,
+    metalness: 0.95,
+    roughness: 0.12,
+    envMapIntensity: 1.5,
+  });
+
+  const goldDarkMat = new THREE.MeshStandardMaterial({
+    color: 0xa07840,
+    metalness: 0.98,
+    roughness: 0.08,
+  });
+
+  const liquidMat = new THREE.MeshPhysicalMaterial({
+    color: 0xd4a96e,
+    metalness: 0.0,
+    roughness: 0.1,
+    transmission: 0.7,
+    transparent: true,
+    opacity: 0.45,
+  });
+
+  const whiteMat = new THREE.MeshStandardMaterial({
+    color: 0xf0ede8,
+    metalness: 0.0,
+    roughness: 0.6,
+  });
+
+  // ── BOTTLE GROUP ──
+  const bottleGroup = new THREE.Group();
+  scene.add(bottleGroup);
+
+  // Cuerpo principal del frasco (cilindro achatado = rectangular)
+  // Usamos una caja redondeada simulada con CylinderGeometry + escala
+  const bodyGeo = new THREE.CylinderGeometry(0.72, 0.72, 2.0, 6, 1);
+  // Escalar en X para hacerlo más rectangular
+  bodyGeo.scale(1.0, 1.0, 0.68);
+  const body = new THREE.Mesh(bodyGeo, glassMat);
+  body.castShadow = true;
+  bottleGroup.add(body);
+
+  // Líquido interior (ligeramente más pequeño)
+  const liquidGeo = new THREE.CylinderGeometry(0.65, 0.65, 1.4, 6, 1);
+  liquidGeo.scale(1.0, 1.0, 0.62);
+  const liquid = new THREE.Mesh(liquidGeo, liquidMat);
+  liquid.position.y = -0.25;
+  bottleGroup.add(liquid);
+
+  // Hombros (parte superior que se estrecha)
+  const shoulderGeo = new THREE.CylinderGeometry(0.32, 0.72, 0.4, 6, 1);
+  shoulderGeo.scale(1.0, 1.0, 0.68);
+  const shoulder = new THREE.Mesh(shoulderGeo, glassMat);
+  shoulder.position.y = 1.2;
+  shoulder.castShadow = true;
+  bottleGroup.add(shoulder);
+
+  // Cuello
+  const neckGeo = new THREE.CylinderGeometry(0.22, 0.32, 0.3, 16);
+  const neck = new THREE.Mesh(neckGeo, glassMat);
+  neck.position.y = 1.55;
+  bottleGroup.add(neck);
+
+  // ── TAPA (collar dorado) ──
+  const collarGeo = new THREE.CylinderGeometry(0.30, 0.30, 0.22, 32);
+  const collar = new THREE.Mesh(collarGeo, goldMat);
+  collar.position.y = 1.76;
+  bottleGroup.add(collar);
+
+  // Anillo decorativo
+  const ringGeo = new THREE.TorusGeometry(0.30, 0.025, 16, 64);
+  const ring3d = new THREE.Mesh(ringGeo, goldDarkMat);
+  ring3d.position.y = 1.64;
+  ring3d.rotation.x = Math.PI/2;
+  bottleGroup.add(ring3d);
+
+  // Cuerpo del spray (tubo blanco)
+  const sprayBodyGeo = new THREE.CylinderGeometry(0.16, 0.19, 0.28, 20);
+  const sprayBody = new THREE.Mesh(sprayBodyGeo, whiteMat);
+  sprayBody.position.y = 2.01;
+  bottleGroup.add(sprayBody);
+
+  // Cabezal del spray
+  const sprayHeadGeo = new THREE.CylinderGeometry(0.13, 0.13, 0.10, 20);
+  const sprayHead = new THREE.Mesh(sprayHeadGeo, whiteMat);
+  sprayHead.position.y = 2.19;
+  bottleGroup.add(sprayHead);
+
+  // Boquilla
+  const nozzleGeo = new THREE.CylinderGeometry(0.025, 0.025, 0.28, 12);
+  const nozzle = new THREE.Mesh(nozzleGeo, goldMat);
+  nozzle.rotation.z = Math.PI/2;
+  nozzle.position.set(0.24, 2.19, 0);
+  bottleGroup.add(nozzle);
+
+  // Base dorada
+  const baseGeo = new THREE.CylinderGeometry(0.74, 0.74, 0.06, 6);
+  baseGeo.scale(1.0, 1.0, 0.68);
+  const base = new THREE.Mesh(baseGeo, goldMat);
+  base.position.y = -1.03;
+  bottleGroup.add(base);
+
+  // Sombra bajo el frasco
+  const shadowGeo = new THREE.CircleGeometry(0.7, 32);
+  const shadowMat = new THREE.MeshBasicMaterial({ color:0x000000, transparent:true, opacity:0.25 });
+  const shadow2d  = new THREE.Mesh(shadowGeo, shadowMat);
+  shadow2d.rotation.x = -Math.PI/2;
+  shadow2d.position.y = -1.08;
+  bottleGroup.add(shadow2d);
+
+  // Posición y escala del grupo
+  bottleGroup.position.set(0.2, -2.2, 0);
+
+  // ── LUCES ──
+  // Luz ambiental suave
+  const ambLight = new THREE.AmbientLight(0xfff8f0, 0.6);
+  scene.add(ambLight);
+
+  // Luz principal (cálida, arriba-derecha)
+  const keyLight = new THREE.DirectionalLight(0xfff0d0, 2.8);
+  keyLight.position.set(3, 5, 4);
+  keyLight.castShadow = true;
+  scene.add(keyLight);
+
+  // Luz de relleno (izquierda, más fría)
+  const fillLight = new THREE.DirectionalLight(0xd0e8ff, 0.8);
+  fillLight.position.set(-4, 2, 2);
+  scene.add(fillLight);
+
+  // Luz de borde (detrás, dorada)
+  const rimLight = new THREE.PointLight(0xc9a96e, 2.5, 10);
+  rimLight.position.set(-1, 1, -3);
+  scene.add(rimLight);
+
+  // Luz de fondo baja
+  const backLight = new THREE.PointLight(0xe8cc99, 1.2, 8);
+  backLight.position.set(2, -1, -2);
+  scene.add(backLight);
+
+  // ── PARTÍCULAS (destellos) ──
+  const starsGeo = new THREE.BufferGeometry();
+  const starCount = 80;
+  const starPos = new Float32Array(starCount*3);
+  for(let i=0;i<starCount;i++){
+    starPos[i*3]   = (Math.random()-0.5)*8;
+    starPos[i*3+1] = (Math.random()-0.5)*6;
+    starPos[i*3+2] = (Math.random()-0.5)*4 - 1;
+  }
+  starsGeo.setAttribute('position', new THREE.BufferAttribute(starPos,3));
+  const starsMat = new THREE.PointsMaterial({ color:0xc9a96e, size:0.025, transparent:true, opacity:0.6 });
+  const stars = new THREE.Points(starsGeo, starsMat);
+  scene.add(stars);
+
+  // ── INTERACTIVIDAD MOUSE ──
+  let targetRotY = 0;
+  let targetRotX = 0;
+  let mouseX = 0, mouseY = 0;
+
+  document.addEventListener('mousemove', e=>{
+    mouseX = (e.clientX/window.innerWidth - 0.5) * 2;
+    mouseY = (e.clientY/window.innerHeight - 0.5) * 1.2;
+  });
+
+  // Touch para móvil
+  document.addEventListener('touchmove', e=>{
+    if(e.touches[0]){
+      mouseX = (e.touches[0].clientX/window.innerWidth - 0.5)*2;
+      mouseY = (e.touches[0].clientY/window.innerHeight - 0.5)*1.2;
+    }
+  });
+
+  // ── RESIZE ──
+  window.addEventListener('resize', ()=>{
+    const w = container.clientWidth;
+    const h = container.clientHeight;
+    camera.aspect = w/h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+  });
+
+  // ── ANIMATE ──
+  let t = 0;
+  function animate(){
+    requestAnimationFrame(animate);
+    t += 0.008;
+
+    // Rotación suave continua + interacción mouse
+    targetRotY = mouseX * 0.4 + t;
+    targetRotX = mouseY * 0.15;
+
+    bottleGroup.rotation.y += (targetRotY - bottleGroup.rotation.y) * 0.04;
+    bottleGroup.rotation.x += (targetRotX - bottleGroup.rotation.x) * 0.04;
+
+    // Flotación suave
+    bottleGroup.position.y = -2.2 + Math.sin(t*0.9) * 0.06;
+
+    // Parpadeo de destellos
+    starsMat.opacity = 0.4 + Math.sin(t*2)*0.2;
+    stars.rotation.y = t * 0.05;
+
+    // Pulso de luz de borde
+    rimLight.intensity = 2.2 + Math.sin(t*1.5) * 0.5;
+
+    renderer.render(scene, camera);
+  }
+  animate();
+})();
 </script>
 
 </body>

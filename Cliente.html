@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -570,40 +571,48 @@ body {
 
 /* ── MOBILE ── */
 @media (max-width: 900px) {
-  .page { grid-template-columns: 1fr; }
+  /* Una sola columna: el contenido va arriba, el resumen abajo */
+  .page {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+  }
 
+  /* El panel derecho vuelve al flujo normal de la página */
   .right {
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
+    position: static;
     height: auto;
-    max-height: 55vh;
     border-left: none;
-    border-top: 1px solid var(--border);
-    z-index: 50;
-    transform: translateY(calc(100% - 70px));
-    transition: transform 0.4s ease;
+    border-top: 2px solid var(--border);
+    /* Quitamos cualquier transform o z-index especial */
+    transform: none !important;
+    z-index: auto;
+    /* Un poco de separación visual arriba */
+    margin-top: 0;
   }
 
-  .right.open { transform: translateY(0); }
-
+  /* El header del panel ya no es clickeable en móvil */
   .right-header {
-    cursor: pointer;
-    padding: 16px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    cursor: default;
+    padding: 28px 24px 20px;
   }
 
-  .right-header::after {
-    content: '↑';
-    color: var(--or);
-    font-size: 18px;
-    transition: transform 0.3s;
+  /* Ocultamos la flecha que era para abrir/cerrar */
+  .right-header::after { display: none; }
+
+  /* El body del resumen no necesita scroll propio en móvil */
+  .right-body {
+    overflow-y: visible;
+    padding: 0 24px 8px;
   }
 
-  .right.open .right-header::after { transform: rotate(180deg); }
+  /* Footer del resumen con más respiración */
+  .right-footer {
+    padding: 20px 24px 36px;
+  }
 
-  .left { padding-bottom: 80px; }
+  /* Sin padding extra abajo en la columna izquierda */
+  .left { padding-bottom: 0; }
+
   .main-content { padding: 24px; }
   .topbar { padding: 16px 24px; }
   .cards-grid { grid-template-columns: repeat(2, 1fr); }
@@ -857,8 +866,10 @@ function agregar(){
   esenciaSeleccionada = null;
   document.querySelectorAll('.prod-card').forEach(c=>c.classList.remove('active'));
 
-  // Abrir panel en móvil
-  document.getElementById('rightPanel').classList.add('open');
+  // Scroll suave al resumen en móvil
+  if(window.innerWidth <= 900){
+    document.getElementById('rightPanel').scrollIntoView({behavior:'smooth', block:'start'});
+  }
 }
 
 /* ── RENDER CARRITO ── */

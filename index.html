@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tendencia Perfumes — Fragancias Únicas</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --noir: #0a0a0a;
+  --noir2: #111111;
+  --noir3: #1a1a1a;
+  --or: #c9a96e;
+  --or2: #e8cc99;
+  --creme: #f5f0e8;
+  --creme2: #ede6d6;
+  --blanc: #ffffff;
+  --gris: #888888;
+  --gris2: #555555;
+  --border: rgba(201,169,110,0.2);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Jost', sans-serif;
+  background: var(--noir);
+  color: var(--creme);
+  overflow-x: hidden;
+}
+
+/* ── CURSOR ── */
+*, a { cursor: none !important; }
+.cursor {
+  position: fixed;
+  width: 8px; height: 8px;
+  background: var(--or);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.15s ease;
+  transform: translate(-50%,-50%);
+}
+.cursor-ring {
+  position: fixed;
+  width: 32px; height: 32px;
+  border: 1px solid rgba(201,169,110,0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transition: all 0.35s ease;
+  transform: translate(-50%,-50%);
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 48px;
+  background: linear-gradient(to bottom, rgba(10,10,10,0.95), transparent);
+  backdrop-filter: blur(8px);
+}
+
+.logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 300;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--or2);
+}
+
+.nav-links {
+  display: flex;
+  gap: 36px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gris);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover { color: var(--or); }
+
+.nav-cta {
+  background: transparent;
+  border: 1px solid var(--or);
+  color: var(--or);
+  padding: 10px 24px;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transition: all 0.35s ease;
+}
+
+.nav-cta:hover {
+  background: var(--or);
+  color: var(--noir);
+}
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(ellipse 60% 70% at 70% 50%, rgba(201,169,110,0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 60% at 20% 80%, rgba(201,169,110,0.04) 0%, transparent 60%),
+    var(--noir);
+}
+
+.hero-lines {
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 79px,
+    rgba(201,169,110,0.04) 79px,
+    rgba(201,169,110,0.04) 80px
+  );
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 0 48px;
+  max-width: 680px;
+  animation: fadeUp 1.2s ease forwards;
+  opacity: 0;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.hero-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.hero-eyebrow span {
+  font-size: 10px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--or);
+}
+
+.hero-eyebrow::before {
+  content: '';
+  width: 40px;
+  height: 1px;
+  background: var(--or);
+  flex-shrink: 0;
+}
+
+.hero h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(52px, 7vw, 88px);
+  font-weight: 300;
+  line-height: 1.05;
+  color: var(--creme);
+  margin-bottom: 24px;
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--or2);
+}
+
+.hero-sub {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--gris);
+  line-height: 1.8;
+  max-width: 440px;
+  margin-bottom: 44px;
+  letter-spacing: 0.04em;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  background: var(--or);
+  color: var(--noir);
+  border: none;
+  padding: 16px 40px;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s ease;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--or2);
+  transform: translateX(-100%);
+  transition: transform 0.4s ease;
+}
+
+.btn-primary:hover::before { transform: translateX(0); }
+.btn-primary span { position: relative; z-index: 1; }
+
+.btn-ghost {
+  background: transparent;
+  border: none;
+  color: var(--gris);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: color 0.3s;
+}
+
+.btn-ghost:hover { color: var(--creme); }
+
+.btn-ghost::after {
+  content: '→';
+  transition: transform 0.3s;
+}
+
+.btn-ghost:hover::after { transform: translateX(4px); }
+
+.hero-img-wrap {
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: 48%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.hero-img-wrap::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 40%;
+  background: linear-gradient(to right, var(--noir), transparent);
+  z-index: 1;
+}
+
+.hero-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.55;
+  filter: sepia(20%) brightness(0.85);
+  animation: slowZoom 12s ease infinite alternate;
+}
+
+@keyframes slowZoom {
+  from { transform: scale(1); }
+  to   { transform: scale(1.06); }
+}
+
+/* ── MARQUEE ── */
+.marquee-bar {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 0;
+  overflow: hidden;
+  background: var(--noir2);
+}
+
+.marquee-track {
+  display: flex;
+  gap: 60px;
+  width: max-content;
+  animation: marquee 25s linear infinite;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.marquee-item {
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gris2);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.marquee-item::after {
+  content: '✦';
+  color: var(--or);
+  font-size: 8px;
+}
+
+/* ── FEATURES ── */
+.features {
+  padding: 120px 48px;
+  background: var(--noir2);
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 72px;
+}
+
+.section-label {
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 16px;
+  display: block;
+}
+
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 4vw, 54px);
+  font-weight: 300;
+  color: var(--creme);
+  line-height: 1.2;
+}
+
+.section-title em {
+  font-style: italic;
+  color: var(--or2);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 2px;
+  border: 1px solid var(--border);
+}
+
+.feature-card {
+  padding: 48px 36px;
+  background: var(--noir2);
+  border: 1px solid transparent;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(to right, var(--or), var(--or2));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+
+.feature-card:hover {
+  background: var(--noir3);
+  border-color: var(--border);
+}
+
+.feature-card:hover::before { transform: scaleX(1); }
+
+.feature-icon {
+  font-size: 28px;
+  margin-bottom: 20px;
+  display: block;
+  filter: grayscale(20%);
+}
+
+.feature-card h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--creme);
+  margin-bottom: 12px;
+}
+
+.feature-card p {
+  font-size: 13px;
+  color: var(--gris);
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+/* ── PROCESS ── */
+.process {
+  padding: 120px 48px;
+  background: var(--noir);
+}
+
+.process-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  margin-top: 80px;
+  border: 1px solid var(--border);
+}
+
+.step {
+  padding: 56px 40px;
+  background: var(--noir);
+  position: relative;
+  transition: background 0.4s;
+}
+
+.step:hover { background: var(--noir2); }
+
+.step-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 80px;
+  font-weight: 300;
+  color: rgba(201,169,110,0.1);
+  line-height: 1;
+  margin-bottom: 20px;
+  transition: color 0.4s;
+}
+
+.step:hover .step-num { color: rgba(201,169,110,0.25); }
+
+.step h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  font-weight: 400;
+  color: var(--creme);
+  margin-bottom: 14px;
+}
+
+.step p {
+  font-size: 13px;
+  color: var(--gris);
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+/* ── CTA SECTION ── */
+.cta-section {
+  padding: 140px 48px;
+  text-align: center;
+  background: var(--noir2);
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(201,169,110,0.06) 0%, transparent 70%);
+}
+
+.cta-section h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(44px, 6vw, 72px);
+  font-weight: 300;
+  color: var(--creme);
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.cta-section h2 em {
+  font-style: italic;
+  color: var(--or);
+}
+
+.cta-section p {
+  font-size: 14px;
+  color: var(--gris);
+  margin-bottom: 48px;
+  letter-spacing: 0.06em;
+  position: relative;
+}
+
+/* ── FOOTER ── */
+footer {
+  padding: 40px 48px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  background: var(--noir);
+}
+
+.footer-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  color: var(--or);
+}
+
+.footer-copy {
+  font-size: 11px;
+  color: var(--gris2);
+  letter-spacing: 0.1em;
+}
+
+.footer-links {
+  display: flex;
+  gap: 24px;
+  list-style: none;
+}
+
+.footer-links a {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--gris2);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.3s;
+}
+
+.footer-links a:hover { color: var(--or); }
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  nav { padding: 18px 24px; }
+  .nav-links { display: none; }
+
+  .hero { min-height: 100svh; align-items: flex-end; padding-bottom: 60px; }
+  .hero-content { padding: 0 24px; }
+  .hero-img-wrap { width: 100%; opacity: 0.3; }
+  .hero-img-wrap::before { width: 100%; background: linear-gradient(to top, var(--noir) 30%, transparent); }
+
+  .features { padding: 80px 24px; }
+  .features-grid { grid-template-columns: 1fr; }
+
+  .process { padding: 80px 24px; }
+  .process-steps { grid-template-columns: 1fr; }
+
+  .cta-section { padding: 80px 24px; }
+
+  footer { padding: 32px 24px; flex-direction: column; text-align: center; }
+  .footer-links { justify-content: center; }
+}
+
+/* ── SCROLL REVEAL ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── HAMBURGER MOBILE ── */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  padding: 4px;
+}
+.hamburger span {
+  width: 22px;
+  height: 1px;
+  background: var(--or);
+  display: block;
+  transition: all 0.3s;
+}
+@media(max-width:768px) {
+  .hamburger { display: flex; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Tendencia</div>
+  <ul class="nav-links">
+    <li><a href="#proceso">Proceso</a></li>
+    <li><a href="#beneficios">Beneficios</a></li>
+    <li><a href="#politicas">Políticas</a></li>
+  </ul>
+  <button class="nav-cta" onclick="irCliente()">Crear Perfume</button>
+  <button class="hamburger" id="menuBtn" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-lines"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <span>Perfumería Artesanal</span>
+    </div>
+    <h1>Tu fragancia,<br><em>tu identidad</em></h1>
+    <p class="hero-sub">Diseña una fragancia exclusiva hecha a tu medida. Elige el envase, la esencia y la intensidad. Una obra personal, única e irrepetible.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="irCliente()"><span>Crear mi perfume</span></button>
+      <button class="btn-ghost" onclick="document.getElementById('proceso').scrollIntoView({behavior:'smooth'})">Cómo funciona</button>
+    </div>
+  </div>
+
+  <div class="hero-img-wrap">
+    <img src="https://images.unsplash.com/photo-1541643600914-78b084683702?w=900&q=80" alt="Perfumes">
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-bar">
+  <div class="marquee-track" id="marqueeTrack"></div>
+</div>
+
+<!-- FEATURES -->
+<section class="features" id="beneficios">
+  <div class="section-header reveal">
+    <span class="section-label">Por qué elegirnos</span>
+    <h2 class="section-title">La experiencia<br><em>que mereces</em></h2>
+  </div>
+
+  <div class="features-grid">
+    <div class="feature-card reveal">
+      <span class="feature-icon">✦</span>
+      <h3>Personalización total</h3>
+      <p>Combina envases, esencias e intensidades para crear una fragancia verdaderamente única.</p>
+    </div>
+    <div class="feature-card reveal">
+      <span class="feature-icon">◈</span>
+      <h3>Alta duración</h3>
+      <p>Fragancias concentradas de larga permanencia. Formuladas para acompañarte todo el día.</p>
+    </div>
+    <div class="feature-card reveal">
+      <span class="feature-icon">⬡</span>
+      <h3>Calidad premium</h3>
+      <p>Ingredientes seleccionados con estrictos criterios de calidad. Lujo accesible.</p>
+    </div>
+    <div class="feature-card reveal">
+      <span class="feature-icon">◇</span>
+      <h3>Entrega rápida</h3>
+      <p>Tu perfume llega a tu puerta. Envíos disponibles en toda tu ciudad.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process" id="proceso">
+  <div class="section-header reveal">
+    <span class="section-label">Cómo funciona</span>
+    <h2 class="section-title">Tres pasos hacia<br><em>tu esencia</em></h2>
+  </div>
+
+  <div class="process-steps">
+    <div class="step reveal">
+      <div class="step-num">01</div>
+      <h3>Elige tu envase</h3>
+      <p>Selecciona entre nuestra colección de frascos de 30ml, 50ml y 100ml. Cada uno, una joya.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">02</div>
+      <h3>Selecciona la esencia</h3>
+      <p>Más de 30 fragancias disponibles. Florales, amaderadas, orientales, cítricas y más.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">03</div>
+      <h3>Recibe tu pedido</h3>
+      <p>Confirma por WhatsApp y recibe tu perfume personalizado en la puerta de tu hogar.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2 class="reveal">Empieza hoy.<br><em>Huele diferente.</em></h2>
+  <p class="reveal">Crea tu fragancia en menos de 2 minutos</p>
+  <button class="btn-primary reveal" onclick="irCliente()"><span>Ir al personalizador →</span></button>
+</section>
+
+<!-- POLÍTICAS desde Firebase -->
+<section class="features" id="politicas" style="background:var(--noir);">
+  <div class="section-header reveal">
+    <span class="section-label">Información legal</span>
+    <h2 class="section-title">Nuestras <em>políticas</em></h2>
+  </div>
+  <div class="features-grid" id="listaPoliticas"></div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Tendencia Perfumes</div>
+  <ul class="footer-links">
+    <li><a href="privacidad.html">Privacidad</a></li>
+    <li><a href="no_devolucion.html">Devoluciones</a></li>
+  </ul>
+  <p class="footer-copy">© 2026 HianStudios</p>
+</footer>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script>
+/* ── CURSOR ── */
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cursor.style.left=mx+'px'; cursor.style.top=my+'px'; });
+function animRing(){ rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(animRing); }
+animRing();
+document.querySelectorAll('button,a,.feature-card,.step').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cursor.style.transform='translate(-50%,-50%) scale(2.5)';ring.style.transform='translate(-50%,-50%) scale(1.5)'; ring.style.borderColor='rgba(201,169,110,0.8)';});
+  el.addEventListener('mouseleave',()=>{cursor.style.transform='translate(-50%,-50%) scale(1)';ring.style.transform='translate(-50%,-50%) scale(1)'; ring.style.borderColor='rgba(201,169,110,0.5)';});
+});
+
+/* ── MARQUEE ── */
+const items = ['Aromas Únicos','Envases Premium','Esencias Seleccionadas','Hecho Para Ti','Entrega Express','Calidad Artesanal'];
+const track = document.getElementById('marqueeTrack');
+let marqueeHTML = '';
+for(let i=0;i<4;i++){
+  items.forEach(t => { marqueeHTML += `<div class="marquee-item">${t}</div>`; });
+}
+track.innerHTML = marqueeHTML;
+
+/* ── SCROLL REVEAL ── */
+const obs = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } });
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>{
+  const delay = Array.from(el.parentElement.children).indexOf(el)*80;
+  el.style.transitionDelay = delay+'ms';
+  obs.observe(el);
+});
+
+/* ── FIREBASE ── */
+const firebaseConfig = {
+  apiKey: "AIzaSyClkqdEQiTeSdQqjdqbQ4nxTrXbuf9_h-0",
+  authDomain: "perfumeria-app.firebaseapp.com",
+  projectId: "perfumeria-app"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+async function cargarPoliticas(){
+  const lista = document.getElementById("listaPoliticas");
+  try {
+    const snap = await db.collection("politicas").get();
+    if(snap.empty){ lista.innerHTML='<div class="feature-card"><p style="color:var(--gris)">No hay políticas disponibles.</p></div>'; return; }
+    snap.forEach(doc => {
+      const d = doc.data();
+      lista.innerHTML += `<div class="feature-card reveal"><h3>${d.titulo}</h3><div style="font-size:13px;color:var(--gris);line-height:1.8;font-weight:300;margin-top:8px">${d.contenido}</div></div>`;
+    });
+    document.querySelectorAll('.feature-card.reveal').forEach(el=>obs.observe(el));
+  } catch(e) { console.log('Firebase no disponible'); }
+}
+cargarPoliticas();
+
+function irCliente(){ window.location.href = "cliente.html"; }
+</script>
+
+</body>
+</html>

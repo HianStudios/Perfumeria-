@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin — Tendencia Perfumes</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ccircle cx=%2750%27 cy=%2750%27 r=%2748%27 fill=%27%230a0a0a%27 stroke=%27%23c9a96e%27 stroke-width=%272.5%27/%3E%3Ctext x=%2750%27 y=%2768%27 font-family=%27Georgia,serif%27 font-size=%2760%27 font-weight=%27bold%27 fill=%27%23c9a96e%27 text-anchor=%27middle%27%3ET%3C/text%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 
 <style>
@@ -503,8 +502,402 @@ body {
 }
 .toast.show { opacity: 1; transform: translateY(0); }
 
-/* ── MOBILE ── */
-.menu-toggle {
+/* ── DASHBOARD ── */
+.dash-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.dash-card {
+  background: var(--noir2);
+  border: 1px solid var(--border2);
+  padding: 28px 24px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s;
+}
+
+.dash-card:hover { border-color: var(--border); }
+
+.dash-card::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(to right, var(--or), var(--or2));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+
+.dash-card:hover::before { transform: scaleX(1); }
+
+.dash-card-label {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gris);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dash-card-icon { font-size: 14px; }
+
+.dash-card-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 44px;
+  font-weight: 300;
+  color: var(--or);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.dash-card-sub {
+  font-size: 11px;
+  color: var(--gris2);
+  letter-spacing: 0.08em;
+}
+
+.dash-card-trend {
+  position: absolute;
+  top: 20px; right: 20px;
+  font-size: 11px;
+  color: var(--success);
+  background: var(--success-soft);
+  padding: 3px 8px;
+  border-radius: 99px;
+}
+
+/* CHART */
+.chart-card {
+  background: var(--noir2);
+  border: 1px solid var(--border2);
+  padding: 28px;
+  margin-bottom: 24px;
+}
+
+.chart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.chart-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 300;
+  color: var(--creme);
+}
+
+.chart-filter {
+  display: flex;
+  gap: 8px;
+}
+
+.filter-btn {
+  background: var(--noir3);
+  border: 1px solid var(--border2);
+  color: var(--gris);
+  padding: 6px 14px;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filter-btn.active, .filter-btn:hover {
+  border-color: var(--or);
+  color: var(--or);
+}
+
+.chart-wrap {
+  position: relative;
+  height: 220px;
+}
+
+canvas.chart { width: 100% !important; height: 100% !important; }
+
+/* TOP LISTS */
+.dash-bottom {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.list-card {
+  background: var(--noir2);
+  border: 1px solid var(--border2);
+  padding: 24px;
+}
+
+.list-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  color: var(--creme);
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border2);
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border2);
+  font-size: 13px;
+}
+
+.list-item:last-child { border-bottom: none; }
+
+.list-item-name { color: var(--creme); }
+.list-item-val { color: var(--or); font-weight: 500; }
+
+.list-rank {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: var(--gris);
+  flex-shrink: 0;
+  margin-right: 10px;
+}
+
+/* ── PEDIDOS ── */
+.pedidos-filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.pedidos-search {
+  flex: 1;
+  min-width: 200px;
+  padding: 10px 16px;
+  background: var(--noir2);
+  border: 1px solid var(--border2);
+  color: var(--creme);
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.pedidos-search:focus { border-color: var(--or); }
+.pedidos-search::placeholder { color: var(--gris2); }
+
+.estado-filter {
+  padding: 10px 16px;
+  background: var(--noir2);
+  border: 1px solid var(--border2);
+  color: var(--creme);
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  outline: none;
+  cursor: pointer;
+}
+
+.pedidos-table-wrap {
+  overflow-x: auto;
+}
+
+.pedidos-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.pedidos-table th {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gris);
+  border-bottom: 1px solid var(--border);
+  background: var(--noir2);
+  white-space: nowrap;
+}
+
+.pedidos-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border2);
+  color: var(--creme);
+  vertical-align: middle;
+}
+
+.pedidos-table tr:hover td { background: rgba(201,169,110,0.03); }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 99px;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.badge-pendiente {
+  background: rgba(251,191,36,0.12);
+  color: #fbbf24;
+  border: 1px solid rgba(251,191,36,0.2);
+}
+
+.badge-completado {
+  background: var(--success-soft);
+  color: var(--success);
+  border: 1px solid rgba(74,222,128,0.2);
+}
+
+.badge-cancelado {
+  background: var(--danger-soft);
+  color: var(--danger);
+  border: 1px solid rgba(239,68,68,0.2);
+}
+
+.pedido-total {
+  color: var(--or);
+  font-weight: 500;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+}
+
+.btn-ver {
+  background: transparent;
+  border: 1px solid var(--border2);
+  color: var(--gris);
+  padding: 6px 12px;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Jost', sans-serif;
+}
+
+.btn-ver:hover { border-color: var(--or); color: var(--or); }
+
+/* MODAL PEDIDO */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+}
+
+.modal {
+  background: var(--noir2);
+  border: 1px solid var(--border);
+  padding: 36px;
+  max-width: 560px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  animation: modalIn 0.3s ease;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border2);
+}
+
+.modal-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  font-weight: 300;
+  color: var(--creme);
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--gris);
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: color 0.2s;
+}
+
+.modal-close:hover { color: var(--danger); }
+
+.modal-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border2);
+  font-size: 13px;
+}
+
+.modal-row:last-child { border-bottom: none; }
+.modal-key { color: var(--gris); letter-spacing: 0.08em; }
+.modal-val { color: var(--creme); text-align: right; }
+
+.modal-items { margin: 16px 0; }
+
+.modal-item {
+  background: var(--noir3);
+  border: 1px solid var(--border2);
+  padding: 12px 16px;
+  margin-bottom: 8px;
+}
+
+.modal-item-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  color: var(--creme);
+  margin-bottom: 4px;
+}
+
+.modal-item-detail { font-size: 12px; color: var(--gris); }
+.modal-item-price { font-size: 14px; color: var(--or); margin-top: 4px; }
+
+.estado-select {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--noir3);
+  border: 1px solid var(--border);
+  color: var(--creme);
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+  margin-top: 16px;
+  outline: none;
+  cursor: pointer;
+}
+
+@media(max-width:900px){
+  .dash-bottom { grid-template-columns: 1fr; }
+  .dash-stats { grid-template-columns: 1fr 1fr; }
+}
+@media(max-width:480px){
+  .dash-stats { grid-template-columns: 1fr; }
+}
   display: none;
   position: fixed;
   top: 16px; left: 16px;
@@ -561,6 +954,12 @@ body {
   </div>
 
   <nav class="sidebar-nav">
+    <button class="nav-item" id="nav-dashboard" onclick="showSection('dashboard')">
+      <span class="nav-icon">◉</span> Dashboard
+    </button>
+    <button class="nav-item" id="nav-pedidos" onclick="showSection('pedidos')">
+      <span class="nav-icon">◫</span> Pedidos
+    </button>
     <button class="nav-item active" id="nav-esencias" onclick="showSection('esencias')">
       <span class="nav-icon">✦</span> Esencias
     </button>
@@ -593,6 +992,7 @@ body {
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 
 <script>
 const firebaseConfig = {
@@ -605,6 +1005,8 @@ const db = firebase.firestore();
 
 let currentSection = 'esencias';
 let editingId = null;
+let chartInstance = null;
+let allPedidos = [];
 
 /* ── TOAST ── */
 function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2800); }
@@ -620,12 +1022,376 @@ function showSection(section){
   document.getElementById('nav-'+section).classList.add('active');
   closeSidebar();
 
-  const titles = { esencias:'Gestión de <span>Esencias</span>', envases:'Gestión de <span>Envases</span>', politicas:'Gestión de <span>Políticas</span>' };
+  const titles = {
+    dashboard: '<span>Dashboard</span>',
+    pedidos: 'Gestión de <span>Pedidos</span>',
+    esencias: 'Gestión de <span>Esencias</span>',
+    envases:  'Gestión de <span>Envases</span>',
+    politicas:'Gestión de <span>Políticas</span>'
+  };
   document.getElementById('pageTitle').innerHTML = titles[section];
 
-  if(section==='esencias') renderEsencias();
-  if(section==='envases') renderEnvases();
+  if(section==='dashboard') renderDashboard();
+  if(section==='pedidos')   renderPedidos();
+  if(section==='esencias')  renderEsencias();
+  if(section==='envases')   renderEnvases();
   if(section==='politicas') renderPoliticas();
+}
+
+/* ══════════════════════════════
+   DASHBOARD
+══════════════════════════════ */
+async function renderDashboard(){
+  document.getElementById('content').innerHTML = `
+    <div class="dash-stats" id="dashStats">
+      ${['','','',''].map(()=>`<div class="dash-card"><div class="dash-card-value" style="font-size:28px;color:var(--gris2)">—</div></div>`).join('')}
+    </div>
+    <div class="chart-card">
+      <div class="chart-header">
+        <span class="chart-title">Ingresos por día</span>
+        <div class="chart-filter">
+          <button class="filter-btn active" onclick="setChartRange(7,this)">7d</button>
+          <button class="filter-btn" onclick="setChartRange(30,this)">30d</button>
+          <button class="filter-btn" onclick="setChartRange(90,this)">90d</button>
+        </div>
+      </div>
+      <div class="chart-wrap"><canvas id="revenueChart" class="chart"></canvas></div>
+    </div>
+    <div class="dash-bottom">
+      <div class="list-card">
+        <div class="list-title">Esencias más pedidas</div>
+        <div id="topEsencias"><p style="color:var(--gris2);font-size:13px">Cargando...</p></div>
+      </div>
+      <div class="list-card">
+        <div class="list-title">Envases más pedidos</div>
+        <div id="topEnvases"><p style="color:var(--gris2);font-size:13px">Cargando...</p></div>
+      </div>
+    </div>`;
+
+  await cargarDashboard(7);
+}
+
+let dashPedidos = [];
+
+async function cargarDashboard(dias){
+  try {
+    const snap = await db.collection("pedidos").get();
+    dashPedidos = [];
+    snap.forEach(doc => dashPedidos.push({id: doc.id, ...doc.data()}));
+
+    const ahora = new Date();
+    const desde = new Date(ahora - dias * 86400000);
+
+    const recientes = dashPedidos.filter(p => p.fecha && new Date(p.fecha) >= desde);
+
+    // ── STATS CARDS ──
+    const totalPedidos = dashPedidos.length;
+    const totalIngresos = dashPedidos.filter(p => p.estado !== 'cancelado').reduce((a,p) => a + (Number(p.total)||0), 0);
+    const clientesUnicos = [...new Set(dashPedidos.map(p=>p.telefono).filter(Boolean))].length;
+    const pedidosPendientes = dashPedidos.filter(p=>p.estado==='pendiente').length;
+
+    document.getElementById('dashStats').innerHTML = `
+      <div class="dash-card">
+        <div class="dash-card-label"><span class="dash-card-icon">◫</span> Total pedidos</div>
+        <div class="dash-card-value">${totalPedidos}</div>
+        <div class="dash-card-sub">${recientes.length} en últimos ${dias}d</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-card-label"><span class="dash-card-icon">◉</span> Clientes únicos</div>
+        <div class="dash-card-value">${clientesUnicos}</div>
+        <div class="dash-card-sub">Por número de teléfono</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-card-label"><span class="dash-card-icon">✦</span> Ingresos totales</div>
+        <div class="dash-card-value" style="font-size:36px">$${totalIngresos.toFixed(0)}</div>
+        <div class="dash-card-sub">$${recientes.filter(p=>p.estado!=='cancelado').reduce((a,p)=>a+(Number(p.total)||0),0).toFixed(0)} en últimos ${dias}d</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-card-label"><span class="dash-card-icon">◈</span> Pendientes</div>
+        <div class="dash-card-value" style="color:#fbbf24">${pedidosPendientes}</div>
+        <div class="dash-card-sub">Sin confirmar</div>
+      </div>`;
+
+    // ── GRÁFICO ──
+    buildChart(dashPedidos, dias);
+
+    // ── TOP ESENCIAS Y ENVASES ──
+    const esenciasCount = {};
+    const envasesCount  = {};
+    dashPedidos.forEach(p => {
+      (p.carrito||[]).forEach(item => {
+        if(item.esencia) esenciasCount[item.esencia] = (esenciasCount[item.esencia]||0)+1;
+        if(item.envase)  envasesCount[item.envase]   = (envasesCount[item.envase]||0)+1;
+      });
+    });
+
+    const renderTop = (obj, elId) => {
+      const sorted = Object.entries(obj).sort((a,b)=>b[1]-a[1]).slice(0,5);
+      const el = document.getElementById(elId);
+      if(!sorted.length){ el.innerHTML='<p style="color:var(--gris2);font-size:13px">Sin datos aún.</p>'; return; }
+      el.innerHTML = sorted.map(([name,cnt],i) => `
+        <div class="list-item">
+          <div style="display:flex;align-items:center">
+            <div class="list-rank">${i+1}</div>
+            <span class="list-item-name">${name}</span>
+          </div>
+          <span class="list-item-val">${cnt} pedidos</span>
+        </div>`).join('');
+    };
+    renderTop(esenciasCount, 'topEsencias');
+    renderTop(envasesCount, 'topEnvases');
+
+  } catch(e){ console.error(e); }
+}
+
+function buildChart(pedidos, dias){
+  const ctx = document.getElementById('revenueChart');
+  if(!ctx) return;
+
+  if(chartInstance){ chartInstance.destroy(); chartInstance = null; }
+
+  // Build daily buckets
+  const ahora = new Date();
+  const labels = [];
+  const values = [];
+
+  for(let i = dias-1; i >= 0; i--){
+    const d = new Date(ahora - i*86400000);
+    const key = d.toLocaleDateString('es-EC', {day:'2-digit', month:'2-digit'});
+    labels.push(key);
+    const dayStr = d.toISOString().slice(0,10);
+    const total = pedidos
+      .filter(p => p.fecha && p.fecha.slice(0,10) === dayStr && p.estado !== 'cancelado')
+      .reduce((a,p) => a + (Number(p.total)||0), 0);
+    values.push(total);
+  }
+
+  chartInstance = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Ingresos $',
+        data: values,
+        backgroundColor: 'rgba(201,169,110,0.25)',
+        borderColor: '#c9a96e',
+        borderWidth: 1,
+        borderRadius: 2,
+        hoverBackgroundColor: 'rgba(201,169,110,0.45)',
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#1a1a1a',
+          borderColor: 'rgba(201,169,110,0.3)',
+          borderWidth: 1,
+          titleColor: '#c9a96e',
+          bodyColor: '#f5f0e8',
+          callbacks: { label: ctx => ` $${ctx.raw.toFixed(2)}` }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(201,169,110,0.05)' },
+          ticks: { color: '#555555', font: { family: 'Jost', size: 10 } }
+        },
+        y: {
+          grid: { color: 'rgba(201,169,110,0.06)' },
+          ticks: { color: '#555555', font: { family: 'Jost', size: 10 }, callback: v => '$'+v }
+        }
+      }
+    }
+  });
+}
+
+function setChartRange(dias, btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  buildChart(dashPedidos, dias);
+}
+
+/* ══════════════════════════════
+   PEDIDOS
+══════════════════════════════ */
+async function renderPedidos(){
+  document.getElementById('content').innerHTML = `
+    <div class="pedidos-filters">
+      <input class="pedidos-search" id="pedidoSearch" placeholder="Buscar por nombre o teléfono..." oninput="filtrarPedidos()">
+      <select class="estado-filter" id="estadoFilter" onchange="filtrarPedidos()">
+        <option value="">Todos los estados</option>
+        <option value="pendiente">Pendiente</option>
+        <option value="completado">Completado</option>
+        <option value="cancelado">Cancelado</option>
+      </select>
+    </div>
+    <div class="pedidos-table-wrap">
+      <table class="pedidos-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Cliente</th>
+            <th>Teléfono</th>
+            <th>Items</th>
+            <th>Total</th>
+            <th>Estado</th>
+            <th>Fecha</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="pedidosTbody">
+          <tr><td colspan="8" style="text-align:center;padding:40px;color:var(--gris2)">Cargando pedidos...</td></tr>
+        </tbody>
+      </table>
+    </div>`;
+
+  await cargarPedidos();
+}
+
+async function cargarPedidos(){
+  try {
+    const snap = await db.collection("pedidos").orderBy("fecha","desc").get();
+    allPedidos = [];
+    snap.forEach(doc => allPedidos.push({id: doc.id, ...doc.data()}));
+    renderTablaPedidos(allPedidos);
+  } catch(e){
+    // orderBy might fail without index, fallback
+    try {
+      const snap = await db.collection("pedidos").get();
+      allPedidos = [];
+      snap.forEach(doc => allPedidos.push({id: doc.id, ...doc.data()}));
+      allPedidos.sort((a,b) => (b.fecha||'').localeCompare(a.fecha||''));
+      renderTablaPedidos(allPedidos);
+    } catch(e2){ console.error(e2); }
+  }
+}
+
+function renderTablaPedidos(lista){
+  const tbody = document.getElementById('pedidosTbody');
+  if(!tbody) return;
+  if(!lista.length){
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--gris2)">No hay pedidos aún.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = lista.map((p,i) => {
+    const fecha = p.fecha ? new Date(p.fecha).toLocaleDateString('es-EC',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '—';
+    const items = (p.carrito||[]).length;
+    const estado = p.estado || 'pendiente';
+    const badgeClass = estado === 'completado' ? 'badge-completado' : estado === 'cancelado' ? 'badge-cancelado' : 'badge-pendiente';
+    return `
+      <tr>
+        <td style="color:var(--gris2);font-size:11px">${String(i+1).padStart(3,'0')}</td>
+        <td>${p.cliente||'—'}</td>
+        <td style="color:var(--gris)">${p.telefono||'—'}</td>
+        <td style="color:var(--gris)">${items} perfume${items!==1?'s':''}</td>
+        <td class="pedido-total">$${Number(p.total||0).toFixed(2)}</td>
+        <td><span class="badge ${badgeClass}">${estado}</span></td>
+        <td style="color:var(--gris);font-size:11px;white-space:nowrap">${fecha}</td>
+        <td><button class="btn-ver" onclick="verPedido('${p.id}')">Ver</button></td>
+      </tr>`;
+  }).join('');
+}
+
+function filtrarPedidos(){
+  const q = (document.getElementById('pedidoSearch')?.value||'').toLowerCase();
+  const est = document.getElementById('estadoFilter')?.value||'';
+  const filtrado = allPedidos.filter(p => {
+    const matchQ = !q || (p.cliente||'').toLowerCase().includes(q) || (p.telefono||'').includes(q);
+    const matchE = !est || p.estado === est;
+    return matchQ && matchE;
+  });
+  renderTablaPedidos(filtrado);
+}
+
+async function verPedido(id){
+  const p = allPedidos.find(x => x.id === id);
+  if(!p) return;
+
+  const fecha = p.fecha ? new Date(p.fecha).toLocaleDateString('es-EC',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '—';
+  const estado = p.estado || 'pendiente';
+
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.id = 'pedidoModal';
+  overlay.onclick = e => { if(e.target === overlay) cerrarModal(); };
+
+  overlay.innerHTML = `
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">Pedido #${String(allPedidos.indexOf(p)+1).padStart(3,'0')}</div>
+        <button class="modal-close" onclick="cerrarModal()">✕</button>
+      </div>
+
+      <div class="modal-row"><span class="modal-key">Cliente</span><span class="modal-val">${p.cliente||'—'}</span></div>
+      <div class="modal-row"><span class="modal-key">Teléfono</span><span class="modal-val">${p.telefono||'—'}</span></div>
+      <div class="modal-row"><span class="modal-key">Fecha</span><span class="modal-val">${fecha}</span></div>
+      <div class="modal-row"><span class="modal-key">Total</span><span class="modal-val" style="color:var(--or);font-family:'Cormorant Garamond',serif;font-size:20px">$${Number(p.total||0).toFixed(2)}</span></div>
+
+      <div style="margin:20px 0 8px;font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:var(--gris)">Productos</div>
+      <div class="modal-items">
+        ${(p.carrito||[]).map(item=>`
+          <div class="modal-item">
+            <div class="modal-item-name">${item.envase||'—'}</div>
+            <div class="modal-item-detail">Esencia: ${item.esencia||'—'} · Duración: ${item.duracion||'—'}</div>
+            <div class="modal-item-price">$${Number(item.precio||0).toFixed(2)}</div>
+          </div>`).join('')}
+      </div>
+
+      <div style="margin:16px 0 8px;font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:var(--gris)">Actualizar estado</div>
+      <select class="estado-select" id="modalEstado" onchange="actualizarEstado('${id}',this.value)">
+        <option value="pendiente" ${estado==='pendiente'?'selected':''}>Pendiente</option>
+        <option value="completado" ${estado==='completado'?'selected':''}>Completado</option>
+        <option value="cancelado" ${estado==='cancelado'?'selected':''}>Cancelado</option>
+      </select>
+
+      <div style="margin-top:16px;">
+        <a href="https://wa.me/${(p.telefono||'').replace(/\D/g,'')}" target="_blank" style="color:#25d366;font-size:12px;letter-spacing:0.1em;text-decoration:none;">💬 Contactar por WhatsApp</a>
+      </div>
+
+      <button id="btnEliminarPedido"
+        onclick="eliminarPedido('${id}')"
+        style="display:${estado==='cancelado'?'block':'none'};margin-top:20px;width:100%;padding:14px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#ef4444;font-family:'Jost',sans-serif;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;transition:all 0.3s;">
+        🗑 Eliminar pedido permanentemente
+      </button>
+    </div>`;
+
+  document.body.appendChild(overlay);
+}
+
+function cerrarModal(){
+  const m = document.getElementById('pedidoModal');
+  if(m) m.remove();
+}
+
+async function actualizarEstado(id, nuevoEstado){
+  try {
+    await db.collection("pedidos").doc(id).update({ estado: nuevoEstado });
+    const p = allPedidos.find(x => x.id === id);
+    if(p) p.estado = nuevoEstado;
+    toast(`✓ Estado actualizado: ${nuevoEstado}`);
+    filtrarPedidos();
+
+    // Mostrar/ocultar botón eliminar según estado
+    const btnEliminar = document.getElementById('btnEliminarPedido');
+    if(btnEliminar){
+      btnEliminar.style.display = nuevoEstado === 'cancelado' ? 'block' : 'none';
+    }
+  } catch(e){ toast('Error actualizando estado'); }
+}
+
+async function eliminarPedido(id){
+  if(!confirm('¿Eliminar este pedido permanentemente? Esta acción no se puede deshacer.')) return;
+  try {
+    await db.collection("pedidos").doc(id).delete();
+    allPedidos = allPedidos.filter(x => x.id !== id);
+    toast('Pedido eliminado');
+    cerrarModal();
+    filtrarPedidos();
+  } catch(e){ toast('Error eliminando pedido'); }
 }
 
 /* ══════════════════════════════
@@ -933,7 +1699,7 @@ function logout(){
 }
 
 /* ── INIT ── */
-showSection('esencias');
+showSection('dashboard');
 </script>
 
 </body>

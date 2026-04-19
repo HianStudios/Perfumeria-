@@ -181,7 +181,7 @@ body {
 
 .prod-card img {
   width: 100%;
-  height: 150px;
+  height: 220px;
   object-fit: cover;
   filter: brightness(0.85);
   transition: filter 0.3s, transform 0.4s;
@@ -571,40 +571,37 @@ body {
 
 /* ── MOBILE ── */
 @media (max-width: 900px) {
-  .page { grid-template-columns: 1fr; }
+  .page {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+  }
 
   .right {
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
+    position: static;
     height: auto;
-    max-height: 55vh;
     border-left: none;
-    border-top: 1px solid var(--border);
-    z-index: 50;
-    transform: translateY(calc(100% - 70px));
-    transition: transform 0.4s ease;
+    border-top: 2px solid var(--border);
+    transform: none !important;
+    z-index: auto;
   }
-
-  .right.open { transform: translateY(0); }
 
   .right-header {
-    cursor: pointer;
-    padding: 16px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    cursor: default;
+    padding: 28px 24px 20px;
   }
 
-  .right-header::after {
-    content: '↑';
-    color: var(--or);
-    font-size: 18px;
-    transition: transform 0.3s;
+  .right-header::after { display: none; }
+
+  .right-body {
+    overflow-y: visible;
+    padding: 0 24px 8px;
   }
 
-  .right.open .right-header::after { transform: rotate(180deg); }
+  .right-footer {
+    padding: 20px 24px 36px;
+  }
 
-  .left { padding-bottom: 80px; }
+  .left { padding-bottom: 0; }
   .main-content { padding: 24px; }
   .topbar { padding: 16px 24px; }
   .cards-grid { grid-template-columns: repeat(2, 1fr); }
@@ -767,10 +764,7 @@ function showToast(msg, duration=2500){
   setTimeout(()=>t.classList.remove('show'), duration);
 }
 
-/* ── PANEL MOBILE ── */
-function togglePanel(){
-  document.getElementById('rightPanel').classList.toggle('open');
-}
+
 
 /* ── LOAD DATA ── */
 async function cargarDatos(){
@@ -859,7 +853,7 @@ function agregar(){
   document.querySelectorAll('.prod-card').forEach(c=>c.classList.remove('active'));
 
   // Abrir panel en móvil
-  document.getElementById('rightPanel').classList.add('open');
+  if(window.innerWidth <= 900){ document.getElementById('rightPanel').scrollIntoView({behavior:'smooth', block:'start'}); }
 }
 
 /* ── RENDER CARRITO ── */
